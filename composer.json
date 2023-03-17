@@ -1,0 +1,15 @@
+{
+	"name": "fgtclb/page-backend-layout",
+	"type": "typo3-cms-extension",
+	"description": "Helper for Backend layout overrides based on page doktype",
+	"minimum-stability": "stable",
+	"license": "GPL-2.0-or-later",
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "page_backend_layout"
+		}
+	},
+	"require": {
+		"typo3/cms-core": "^11.5"
+	}
+}

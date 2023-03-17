@@ -1,0 +1,7 @@
+module.tx_backend {
+  view {
+    templateRootPaths {
+      pbl = EXT:page_backend_layout/Resources/Private/Backend/Templates/
+    }
+  }
+}
