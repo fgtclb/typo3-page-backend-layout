@@ -68,7 +68,7 @@ class ImageIdViewHelper extends AbstractViewHelper
         if ($returnFirst) {
             $result = $statement->fetchAssociative();
             if ($result !== false) {
-                $value = new FileReference($result);
+                $value = (new FileReference($result))->getOriginalFile();
             } else {
                 throw new \InvalidArgumentException(
                     'Given combination does not give images/references',
@@ -79,7 +79,7 @@ class ImageIdViewHelper extends AbstractViewHelper
             $result = $statement->fetchAllAssociative();
             $value = [];
             foreach ($result as $line) {
-                $value[] = new FileReference($line);
+                $value[] = (new FileReference($line))->getOriginalFile();
             }
         }
 
