@@ -68,18 +68,15 @@ class ImageIdViewHelper extends AbstractViewHelper
         if ($returnFirst) {
             $result = $statement->fetchAssociative();
             if ($result !== false) {
-                $value = (new FileReference($result))->getOriginalFile();
+                $value = new FileReference($result);
             } else {
-                throw new \InvalidArgumentException(
-                    'Given combination does not give images/references',
-                    1683722218631
-                );
+                $value = false;
             }
         } else {
             $result = $statement->fetchAllAssociative();
             $value = [];
             foreach ($result as $line) {
-                $value[] = (new FileReference($line))->getOriginalFile();
+                $value[] = new FileReference($line);
             }
         }
 
