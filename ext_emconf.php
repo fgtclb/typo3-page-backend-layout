@@ -7,5 +7,5 @@ $EM_CONF[$_EXTKEY] = [
     'description' => 'Helper for Backend layout overrides based on page doktype',
     'category' => 'be',
     'state' => 'beta',
-    'version' => '1.0.0',
+    'version' => '1.0.1',
 ];
