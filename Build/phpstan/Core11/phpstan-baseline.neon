@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to an undefined method TYPO3Fluid\\\\Fluid\\\\Core\\\\Rendering\\\\RenderingContextInterface\\:\\:getRequest\\(\\)\\.$#"
+			count: 1
+			path: ../../../Classes/ViewHelpers/Be/ImageIdViewHelper.php
+
+		-
 			message: "#^Variable \\$_EXTKEY might not be defined\\.$#"
 			count: 1
 			path: ../../../ext_emconf.php
