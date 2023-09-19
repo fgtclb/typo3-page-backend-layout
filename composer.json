@@ -4,13 +4,39 @@
 	"description": "Helper for Backend layout overrides based on page doktype",
 	"minimum-stability": "stable",
 	"license": "GPL-2.0-or-later",
+	"config": {
+		"vendor-dir": ".Build/vendor",
+		"bin-dir": ".Build/bin",
+		"optimize-autoloader": true,
+		"sort-packages": true,
+		"allow-plugins": {
+			"typo3/class-alias-loader": true,
+			"typo3/cms-composer-installers": true
+		}
+	},
 	"extra": {
 		"typo3/cms": {
-			"extension-key": "page_backend_layout"
+			"cms-package-dir": "{$vendor-dir}/typo3/cms",
+			"extension-key": "page_backend_layout",
+			"ignore-as-root": false,
+			"web-dir": ".Build/public",
+			"app-dir": ".Build"
 		}
 	},
 	"require": {
 		"typo3/cms-core": "^11.5"
+	},
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "^3.14",
+		"phpstan/phpstan": "^1.10",
+		"saschaegerer/phpstan-typo3": "^1.8",
+		"typo3/cms-extensionmanager": "^11.5",
+		"typo3/cms-fluid-styled-content": "^11.5",
+		"typo3/cms-frontend": "^11.5",
+		"typo3/cms-info": "^11.5",
+		"typo3/cms-lowlevel": "^11.5",
+		"typo3/cms-tstemplate": "^11.5",
+		"typo3/coding-standards": "^0.6.1"
 	},
 	"autoload": {
 		"psr-4": {
