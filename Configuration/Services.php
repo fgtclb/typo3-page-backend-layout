@@ -13,6 +13,5 @@ return function (ContainerConfigurator $containerConfigurator) {
         ->public();
 
     $services
-        ->load('FGTCLB\\PageBackendLayout\\', '../Classes/')
-        ->exclude('../Classes/Domain/Model/');
+        ->load('FGTCLB\\PageBackendLayout\\', '../Classes/');
 };
