@@ -1,7 +1,7 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => '(FGTCLB) Page Backend Layout',
+    'title' => 'Page Backend Layout',
     'description' => 'Helper for Backend layout overrides based on page doktype',
     'category' => 'be',
     'state' => 'stable',
@@ -11,7 +11,7 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '1.0.3',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-11.5.99',
+            'typo3' => '11.5.0-13.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
