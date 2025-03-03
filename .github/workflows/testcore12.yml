@@ -40,7 +40,7 @@ jobs:
       statuses: none
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: "Prepare dependencies for TYPO3 v12"
         run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s composer require typo3/cms-core:^12.4"
@@ -79,7 +79,7 @@ jobs:
 #        php-version: [ '8.1', '8.2', '8.3' ]
 #    steps:
 #      - name: "Checkout"
-#        uses: actions/checkout@v3
+#        uses: actions/checkout@v4
 
 #      - name: "Prepare dependencies for TYPO3 v12"
 #        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s composerUpdate"
