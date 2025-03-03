@@ -1,20 +1,15 @@
 name: tests core 11
 
 on:
-  pull_request:
+  workflow_dispatch:
 
 # **NOTE** that this workflow is kept to keep the ability to create CI status badges
 # for other version branches, which needs the same file on the default branch. Nasty
 # GitHub requirement.
 jobs:
-  code-quality:
-    name: "code quality with core v11"
-    runs-on: ubuntu-22.04
-    strategy:
-      fail-fast: false
-      matrix:
-        php-version: [ '7.4']
+  dummy:
+    name: "dummy v11 (disabled on main) to allow creation of badges for other branches"
+    runs-on: ubuntu-latest
     steps:
-      - name: dummy
-        run: |
-          echo "dummy"
+      - name: "Checkout"
+        uses: actions/checkout@v4

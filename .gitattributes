@@ -15,7 +15,6 @@
 .phplint.yml export-ignore
 .stylelintrc export-ignore
 docker-compose.yaml export-ignore
-rector.php export-ignore
 
 # Enforce checkout with linux lf consistent over all plattforms
 *.xml text eol=lf
