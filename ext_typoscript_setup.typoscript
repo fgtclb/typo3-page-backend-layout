@@ -1,8 +1,0 @@
-# @todo typo3/cms-core:^13 remove when v11 support dropped
-module.tx_backend {
-  view {
-    templateRootPaths {
-      pbl = EXT:page_backend_layout/Resources/Private/Backend/Templates/
-    }
-  }
-}
