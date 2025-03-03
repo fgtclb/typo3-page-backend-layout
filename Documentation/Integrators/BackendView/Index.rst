@@ -1,5 +1,7 @@
 .. include:: /Includes.rst.txt
 
+.. _integration:
+
 Integrate Backend View
 ======================
 
@@ -11,19 +13,13 @@ necessary information according to your own wishes and ideas.
 
 The following steps are necessary to create a page type-based information block:
 
-Create an override TypoScript
------------------------------
+Add your backend partials to the system
+---------------------------------------
 
 ..  code-block:: typoscript
-    :caption: EXT:example/ext_typoscript_setup.typoscript
+    :caption: EXT:example/Configuration/page.tsconfig
 
-    module.tx_backend {
-      view {
-        partialRootPaths {
-          example = EXT:example/Resources/Private/Backend/Partials/
-        }
-      }
-    }
+    templates.typo3/cms-backend.1740993701933 = vendor/example:Resources/Private/Backend/Templates
 
 Create your partial
 -------------------

@@ -1,16 +1,10 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
-
 .. include:: /Includes.rst.txt
-
 
 .. _start:
 
-=====================
-FGTCLB Category Types
-=====================
+==========================
+FGTCLB Page Backend Layout
+==========================
 
 :Extension key:
     page_backend_layout
@@ -22,10 +16,10 @@ FGTCLB Category Types
     en
 
 :Description:
-    Provide typed categories in TYPO3.
+    Provide page backend information made easy in TYPO3.
 
 :Keywords:
-    category
+    backend
 
 :Copyright:
     2023
