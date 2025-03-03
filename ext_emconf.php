@@ -7,10 +7,12 @@ $EM_CONF[$_EXTKEY] = [
     'state' => 'stable',
     'author' => 'FGTCLB',
     'author_email' => 'hello@fgtclb.com',
-    'version' => '1.0.3',
+    'version' => '2.0.0',
     'constraints' => [
         'depends' => [
-            'typo3' => '11.5.0-12.4.99',
+            'typo3' => '12.4.0-13.4.99',
+            'backend' => '12.4.0-13.4.99',
+            'fluid' => '12.4.0-13.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],
