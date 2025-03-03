@@ -9,17 +9,17 @@
 ##########################
 
 FILES=`find . -type f \
-    ! -path "./.Build/*" \
-    ! -path "./.git/*" \
-    ! -path "./.php_cs.cache" \
-    ! -path "./.php-cs-fixer.cache" \
-    ! -path "./Documentation-GENERATED-temp/*" \
-    -print0 | xargs -0 -n1 -P8 file {} | grep 'UTF-8 Unicode (with BOM)'`
+! -path "./.Build/*" \
+! -path "./.git/*" \
+! -path "./.php_cs.cache" \
+! -path "./.php-cs-fixer.cache" \
+! -path "./Documentation-GENERATED-temp/*" \
+-print0 | xargs -0 -n1 -P8 file {} | grep 'UTF-8 Unicode (with BOM)'`
 
 if [ -n "${FILES}" ]; then
-    echo "Found UTF-8 files with BOM:";
-    echo ${FILES};
-    exit 1;
+echo "Found UTF-8 files with BOM:";
+echo ${FILES};
+exit 1;
 fi
 
 exit 0
