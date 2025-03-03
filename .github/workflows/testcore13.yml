@@ -5,12 +5,12 @@ on:
 
 jobs:
   code-quality:
-    name: "code quality with core v12"
+    name: "code quality with core v13"
     runs-on: ubuntu-22.04
     strategy:
       fail-fast: false
       matrix:
-        php-version: [ '8.1' ]
+        php-version: [ '8.2' ]
     permissions:
       # actions: read|write|none
       actions: none
@@ -40,34 +40,34 @@ jobs:
       statuses: none
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: "Prepare dependencies for TYPO3 v12"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s composer require typo3/cms-core:^12.4"
+      - name: "Prepare dependencies for TYPO3 v13"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s composer require typo3/cms-core:^13.4"
 
       - name: "Run TypoScript lint"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s lintTypoScript"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s lintTypoScript"
 
       - name: "Run PHP lint"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s lintPhp"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s lintPhp"
 
       - name: "Validate CGL"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s cgl"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s cgl"
 
 #      - name: "Ensure tests methods do not start with \"test\""
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s checkTestMethodsPrefix"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s checkTestMethodsPrefix"
 
       - name: "Ensure UTF-8 files do not contain BOM"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s checkBom"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s checkBom"
 
       - name: "Test .rst files for integrity"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s checkRst"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s checkRst"
 
 #      - name: "Find duplicate exception codes"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s checkExceptionCodes"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s checkExceptionCodes"
 
       - name: "Run PHPStan"
-        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s phpstan"
+        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s phpstan"
 
 #  testsuite:
 #    name: all tests with core v12
@@ -76,34 +76,34 @@ jobs:
 #    strategy:
 #      fail-fast: false
 #      matrix:
-#        php-version: [ '8.1', '8.2', '8.3' ]
+#        php-version: [ '8.2', '8.3', '8.4' ]
 #    steps:
 #      - name: "Checkout"
 #        uses: actions/checkout@v3
 
 #      - name: "Prepare dependencies for TYPO3 v12"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s composerUpdate"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s composerUpdate"
 
 #      - name: "Unit"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s unit"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s unit"
 
 #      - name: "Functional SQLite"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d sqlite"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d sqlite"
 
 #      - name: "Functional MariaDB 10.5 mysqli"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
 
 #      - name: "Functional MariaDB 10.5 pdo_mysql"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
 
 #      - name: "Functional MySQL 8.0 mysqli"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d mariadb -a mysqli"
 
 #      - name: "Functional MySQL 8.0 pdo_mysql"
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d mariadb -a pdo_mysql"
 
 #      - name: "Functional PostgresSQL 10"
 #        # v12 postgres functional disabled with PHP 8.2 since https://github.com/doctrine/dbal/commit/73eec6d882b99e1e2d2d937accca89c1bd91b2d7
 #        # is not fixed in doctrine core v12 doctrine 2.13.9
 #        if: ${{ matrix.php <= '8.1' }}
-#        run: "Build/Scripts/runTests.sh -t 12 -p ${{ matrix.php-version }} -s functional -d postgres"
+#        run: "Build/Scripts/runTests.sh -t 13 -p ${{ matrix.php-version }} -s functional -d postgres"
