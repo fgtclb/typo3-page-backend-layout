@@ -26,14 +26,16 @@ extension by one of the following methods:
     You can always get current version from `TER`_ by downloading the zip
     version. Upload the file afterwards in the Extension Manager.
 
-and :ref:`configure <extensionConfiguration>` it.
-
-Inside your own site configuration follow the instructions for
-:ref:`table configuration <tableConfiguration>`.
+For overriding PageLayouts, follow the instructions at the
+:ref:`Integrators section <integration>`.
 
 .. _TER: https://extensions.typo3.org/extension/page_backend_layout
 
 Compatibility
 -------------
 
-*page_backend_layout* supports TYPO3 v11.
+Page Backend Layout supports:
+
+..  csv-table:: Changes
+    :header: "Page Backend Layout version","TYPO3 Version","PHP version"
+    :file: Files/versionSupport.csv
