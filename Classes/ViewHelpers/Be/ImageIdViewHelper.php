@@ -4,40 +4,58 @@ declare(strict_types=1);
 
 namespace FGTCLB\PageBackendLayout\ViewHelpers\Be;
 
-use Closure;
-use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
-use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 class ImageIdViewHelper extends AbstractViewHelper
 {
-    use CompileWithRenderStatic;
-
     protected $escapeOutput = false;
 
+    public function initializeArguments(): void
+    {
+        $this->registerArgument('table', 'string', 'The table', true);
+        $this->registerArgument('field', 'string', 'Field matching', true);
+        $this->registerArgument('uid', 'int', 'Integer of current record', true);
+        $this->registerArgument('returnFirst', 'bool', 'Whether to return only the first value', false, true);
+        $this->registerArgument('as', 'string', 'Variable name to return', false, 'image');
+    }
+
     /**
-     * @param array{
-     *     table: string,
-     *     field: string,
-     *     uid: int,
-     *     returnFirst: bool,
-     *     as: string
-     * } $arguments
-     * @throws Exception
      * @throws FileDoesNotExistException
+     * @throws Exception
+     * @throws \RuntimeException
      */
-    public static function renderStatic(
-        array $arguments,
-        Closure $renderChildrenClosure,
-        RenderingContextInterface $renderingContext
-    ): mixed {
+    public function render(): string
+    {
+        /**
+         * @var array{
+         *     table: string,
+         *     field: string,
+         *     uid: int,
+         *     returnFirst: bool,
+         *     as: string
+         * } $arguments
+         */
+        $arguments = $this->arguments;
+        /** @var RenderingContext $renderingContext */
+        $renderingContext = $this->renderingContext;
+        $renderChildrenClosure = $this->renderChildrenClosure;
+
+        /** @var ServerRequestInterface|null $request */
         $request = $renderingContext->getRequest();
+        if ($request === null) {
+            throw new \RuntimeException(
+                'ViewHelper can only be called with a proper request',
+                1740993136
+            );
+        }
         $isBackendRequest = $request->getAttribute('applicationType')
             && ApplicationType::fromRequest($request)->isBackend();
         if (!$isBackendRequest) {
@@ -84,14 +102,5 @@ class ImageIdViewHelper extends AbstractViewHelper
         $output = $renderChildrenClosure();
         $templateVariableContainer->remove($varName);
         return $output;
-    }
-
-    public function initializeArguments(): void
-    {
-        $this->registerArgument('table', 'string', 'The table', true);
-        $this->registerArgument('field', 'string', 'Field matching', true);
-        $this->registerArgument('uid', 'int', 'Integer of current record', true);
-        $this->registerArgument('returnFirst', 'bool', 'Whether to return only the frist value', false, true);
-        $this->registerArgument('as', 'string', 'Variable name to return', false, 'image');
     }
 }
