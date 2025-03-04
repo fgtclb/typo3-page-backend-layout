@@ -56,7 +56,7 @@ Prerequisites:
 ```shell
 echo '>> Prepare release pull-request' ; \
   RELEASE_BRANCH='main' ; \
-  RELEASE_VERSION='0.1.4' ; \
+  RELEASE_VERSION='2.0.0' ; \
   git checkout main && \
   git fetch --all && \
   git pull --rebase && \
@@ -84,7 +84,7 @@ Check pull-request and the pipeline run.
 
 ```shell
 RELEASE_BRANCH='main' ; \
-RELEASE_VERSION='0.1.4' ; \
+RELEASE_VERSION='2.0.0' ; \
 RELEASE_PR_NUMBER='123' ; \
   git checkout main && \
   git fetch --all && \
