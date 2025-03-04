@@ -1,3 +1,4 @@
+# @todo Silently ignored with TYPO3 v12 and will be dropped in 2.x
 module.tx_backend {
   view {
     templateRootPaths {
