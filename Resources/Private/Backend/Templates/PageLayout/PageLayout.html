@@ -1,10 +1,15 @@
 <html
+    lang="en"
     xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
     xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
     data-namespace-typo3-fluid="true"
 >
 <f:render partial="PageLayout/Doktype{context.pageRecord.doktype}" arguments="{_all}" optional="true"/>
-<f:if condition="{context.drawingConfiguration.languageMode}">
+<f:comment><!--
+TYPO3 12: languageMode
+TYPO3 13: languageComparisonMode
+--></f:comment>
+<f:if condition="{context.drawingConfiguration.languageMode} || {context.drawingConfiguration.languageComparisonMode}">
     <f:then>
         <f:render partial="PageLayout/LanguageColumns" arguments="{_all}" />
     </f:then>
