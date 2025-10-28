@@ -46,7 +46,7 @@ class ImageIdViewHelper extends AbstractViewHelper
         $arguments = $this->arguments;
         /** @var RenderingContext $renderingContext */
         $renderingContext = $this->renderingContext;
-        $renderChildrenClosure = $this->renderChildrenClosure;
+        $renderChildrenClosure = $this->buildRenderChildrenClosure();
 
         /** @var ServerRequestInterface|null $request */
         $request = $renderingContext->getRequest();
