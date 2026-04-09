@@ -21,7 +21,7 @@ waitFor() {
             COUNT=\$((COUNT + 1));
         done;
     "
-    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name wait-for-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_ALPINE} /bin/sh -c "${TESTCOMMAND}"
+    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name wait-for-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_PHP} /bin/sh -c "${TESTCOMMAND}"
     if [[ $? -gt 0 ]]; then
         kill -SIGINT -$$
     fi
@@ -227,6 +227,7 @@ Options:
             - 8.2: (default) use PHP 8.2
             - 8.3: use PHP 8.3
             - 8.4: use PHP 8.4
+            - 8.5: use PHP 8.5
 
     -x
         Only with -s functional|functionalDeprecated|unit|unitDeprecated|unitRandom|acceptance|acceptanceInstall
@@ -333,7 +334,7 @@ while getopts "a:b:s:d:i:p:t:xy:o:nhu" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4|8.5)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
@@ -423,7 +424,6 @@ if [[ -z "${CONTAINER_BIN}" ]]; then
 fi
 
 IMAGE_PHP="ghcr.io/typo3/core-testing-$(echo "php${PHP_VERSION}" | sed -e 's/\.//'):latest"
-IMAGE_ALPINE="docker.io/alpine:3.8"
 IMAGE_DOCS="ghcr.io/typo3-documentation/render-guides:latest"
 IMAGE_SELENIUM="docker.io/selenium/standalone-chrome:4.0.0-20211102"
 IMAGE_MARIADB="docker.io/mariadb:${DBMS_VERSION}"
@@ -570,7 +570,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     renderDocumentation)
-        ${CONTAINER_BIN} run ${CONTAINER_INTERACTIVE} --pull always -v ${ROOT_DIR}:/project -it ghcr.io/typo3-documentation/render-guides:latest --config=Documentation
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name rendering-documentation-${SUFFIX} --pull always -w /project -v ${ROOT_DIR}:/project -it ${IMAGE_DOCS} --config=Documentation --fail-on-error --no-progress --config=Documentation Documentation "$@"
         SUITE_EXIT_CODE=$?
         ;;
     phpstan)
