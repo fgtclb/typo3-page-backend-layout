@@ -305,6 +305,8 @@ DATABASE_DRIVER=""
 DBMS_VERSION=""
 CONTAINER_BIN=""
 CONTAINER_HOST="host.docker.internal"
+CI_PARAMS="${CI_PARAMS:-}"
+CONTAINER_INTERACTIVE="-it --init"
 
 # Option parsing updates above default vars
 # Reset in case getopts has been used previously in the shell
@@ -387,7 +389,6 @@ fi
 handleDbmsOptions
 
 COMPOSER_ROOT_VERSION="5.x.x-dev"
-CONTAINER_INTERACTIVE="-it --init"
 HOST_UID=$(id -u)
 USERSET=""
 if [ $(uname) != "Darwin" ]; then
@@ -570,7 +571,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     renderDocumentation)
-        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name rendering-documentation-${SUFFIX} --pull always -w /project -v ${ROOT_DIR}:/project -it ${IMAGE_DOCS} --config=Documentation --fail-on-error --no-progress --config=Documentation Documentation "$@"
+        ${CONTAINER_BIN} run ${DOCUMENTATION_COMMON_PARAMS} --name rendering-documentation-${SUFFIX} --pull always -w /project -v ${ROOT_DIR}:/project -it ${IMAGE_DOCS} --config=Documentation --fail-on-error --no-progress --config=Documentation Documentation "$@"
         SUITE_EXIT_CODE=$?
         ;;
     phpstan)
