@@ -57,6 +57,12 @@ jobs:
         run: |
           php ~/.composer/vendor/bin/tailor create-artefact ${{ env.version }}
 
+      - name: "Render documentation"
+        id: rendering
+        run: |
+          Build/Scripts/runTests.sh -b docker -s renderDocumentation || true
+          zip -r tailor-version-artefact/documentation-${{ env.version }}.zip Documentation-GENERATED-temp/
+
       # Note that when release already exists for tag, only files will be uploaded and lets this acting as a
       # fallback to ensure that a real GitHub release is created for the tag along with extension artifacts.
       - name: Create release and upload artifacts in the same step
@@ -67,6 +73,7 @@ jobs:
           generate_release_notes: true
           files: |
             tailor-version-artefact/${{ env.DETECTED_EXTENSION_KEY }}_${{ env.version }}.zip
+            tailor-version-artefact/documentation-${{ env.version }}.zip
             LICENSE
           fail_on_unmatched_files: true
 
