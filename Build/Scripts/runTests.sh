@@ -607,7 +607,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     renderDocumentation)
-        ${CONTAINER_BIN} run ${DOCUMENTATION_COMMON_PARAMS} --name rendering-documentation-${SUFFIX} --pull always -w /project -v ${ROOT_DIR}:/project -it ${IMAGE_DOCS} --config=Documentation --fail-on-error --no-progress --config=Documentation Documentation "$@"
+        ${CONTAINER_BIN} run ${DOCUMENTATION_COMMON_PARAMS} --name rendering-documentation-${SUFFIX} --pull always -w /project ${IMAGE_DOCS} --config=Documentation --fail-on-error --no-progress --config=Documentation Documentation "$@"
         SUITE_EXIT_CODE=$?
         ;;
     phpstan)
