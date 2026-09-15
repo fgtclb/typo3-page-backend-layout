@@ -1,7 +1,7 @@
 {
 	"name": "fgtclb/page-backend-layout",
 	"type": "typo3-cms-extension",
-	"description": "Helper for Backend layout overrides based on page doktype",
+	"description": "FGTCLB: Page Backend Layout - Helper for Backend layout overrides based on page doktype",
 	"minimum-stability": "stable",
 	"license": "GPL-2.0-or-later",
 	"config": {
