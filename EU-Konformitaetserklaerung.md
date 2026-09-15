@@ -1,11 +1,11 @@
 # EU-Konformitätserklärung
 
-**Produkt:** (FGTCLB) Page Backend Layout
+**Produkt:** FGTCLB: Page Backend Layout
 **Referenz:** DoC-page_backend_layout-2.1.0
 
 ## 1. Produktidentifikation
 
-- **Produktname:** (FGTCLB) Page Backend Layout
+- **Produktname:** FGTCLB: Page Backend Layout
 - **Typ:** TYPO3-Extension
 - **Extension Key / Package:** page_backend_layout (fgtclb/page-backend-layout)
 - **Version:** 2.1.0 (Erstausstellung dieser Erklärung)
@@ -26,7 +26,7 @@ EU-Konformitätserklärung trägt der Hersteller, web-vision GmbH.
 
 ## 4. Gegenstand der Erklärung
 
-(FGTCLB) Page Backend Layout, Version 2.1.0, vertrieben über das TYPO3
+FGTCLB: Page Backend Layout, Version 2.1.0, vertrieben über das TYPO3
 Extension Repository (TER) und Packagist.
 
 ## 5. Konformitätserklärung
@@ -60,7 +60,7 @@ Unterzeichnet für und im Namen von: web-vision GmbH
 ## Vereinfachte EU-Konformitätserklärung (Anhang VI)
 
 > Hiermit erklärt die web-vision GmbH, dass das Produkt mit digitalen
-> Elementen des Typs (FGTCLB) Page Backend Layout der Verordnung (EU) 2024/2847 entspricht.
+> Elementen des Typs FGTCLB: Page Backend Layout der Verordnung (EU) 2024/2847 entspricht.
 >
 > Der vollständige Text der EU-Konformitätserklärung ist unter der
 > folgenden Internetadresse verfügbar:
