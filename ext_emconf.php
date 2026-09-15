@@ -1,7 +1,7 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => '(FGTCLB) Page Backend Layout',
+    'title' => 'FGTCLB: Page Backend Layout',
     'description' => 'Helper for Backend layout overrides based on page doktype',
     'category' => 'be',
     'state' => 'stable',

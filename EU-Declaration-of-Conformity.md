@@ -1,11 +1,11 @@
 # EU Declaration of Conformity
 
-**Product:** (FGTCLB) Page Backend Layout
+**Product:** FGTCLB: Page Backend Layout
 **Reference:** DoC-page_backend_layout-2.1.0
 
 ## 1. Product identification
 
-- **Product name:** (FGTCLB) Page Backend Layout
+- **Product name:** FGTCLB: Page Backend Layout
 - **Type:** TYPO3 Extension
 - **Extension key / package:** page_backend_layout (fgtclb/page-backend-layout)
 - **Version:** 2.1.0 (initial issuance of this declaration)
@@ -26,7 +26,7 @@ of the manufacturer, web-vision GmbH.
 
 ## 4. Object of the declaration
 
-(FGTCLB) Page Backend Layout, version 2.1.0, as distributed via the
+FGTCLB: Page Backend Layout, version 2.1.0, as distributed via the
 TYPO3 Extension Repository (TER) and Packagist.
 
 ## 5. Statement of conformity
@@ -60,7 +60,7 @@ Signed for and on behalf of: web-vision GmbH
 ## Simplified EU Declaration of Conformity (Annex VI)
 
 > Hereby, web-vision GmbH declares that the product with digital elements
-> type (FGTCLB) Page Backend Layout is in compliance with Regulation (EU) 2024/2847.
+> type FGTCLB: Page Backend Layout is in compliance with Regulation (EU) 2024/2847.
 >
 > The full text of the EU declaration of conformity is available at the
 > following internet address:
