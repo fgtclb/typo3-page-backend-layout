@@ -9,6 +9,7 @@ use FGTCLB\PageBackendLayout\Exception\WrongContextException;
 use FGTCLB\PageBackendLayout\ViewHelpers\Be\ImageIdViewHelper;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ServerRequest;
@@ -28,7 +29,7 @@ final class ImageIdViewHelperTest extends UnitTestCase
     #[Test]
     public function renderingWithoutRequestIsRejected(): void
     {
-        $subject = new ImageIdViewHelper(new ConnectionPool());
+        $subject = new ImageIdViewHelper(new ConnectionPool(), new Context());
         $subject->setRenderingContext(new RenderingContext());
         $subject->setArguments(self::ARGUMENTS);
 
@@ -47,7 +48,7 @@ final class ImageIdViewHelperTest extends UnitTestCase
             (new ServerRequest('https://localhost/'))
                 ->withAttribute('applicationType', SystemEnvironmentBuilder::REQUESTTYPE_FE)
         );
-        $subject = new ImageIdViewHelper(new ConnectionPool());
+        $subject = new ImageIdViewHelper(new ConnectionPool(), new Context());
         $subject->setRenderingContext($renderingContext);
         $subject->setArguments(self::ARGUMENTS);
 
@@ -62,7 +63,7 @@ final class ImageIdViewHelperTest extends UnitTestCase
     {
         $renderingContext = new RenderingContext();
         $renderingContext->setAttribute(ServerRequestInterface::class, new ServerRequest('https://localhost/'));
-        $subject = new ImageIdViewHelper(new ConnectionPool());
+        $subject = new ImageIdViewHelper(new ConnectionPool(), new Context());
         $subject->setRenderingContext($renderingContext);
         $subject->setArguments(self::ARGUMENTS);
 
