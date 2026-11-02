@@ -23,7 +23,11 @@
 			"extension-key": "page_backend_layout",
 			"ignore-as-root": false,
 			"web-dir": ".Build/public",
-			"app-dir": ".Build"
+			"app-dir": ".Build",
+			"version": "3.0.0",
+			"Package": {
+				"providesPackages": []
+			}
 		}
 	},
 	"require": {
