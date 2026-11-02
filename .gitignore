@@ -11,3 +11,4 @@
 /composer.json.orig
 /.php-cs-fixer.cache
 /Documentation-GENERATED-temp/
+/Tests/Acceptance/node_modules/

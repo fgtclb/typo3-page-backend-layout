@@ -1,0 +1,12 @@
+{
+  "name": "page-backend-layout-acceptance",
+  "private": true,
+  "description": "Acceptance tests of fgtclb/page-backend-layout, run through Build/Scripts/runTests.sh -s acceptance",
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1"
+  }
+}

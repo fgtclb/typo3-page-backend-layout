@@ -150,6 +150,9 @@ Usage: $0 [options] [file]
 Options:
     -s <...>
         Specifies which test suite to run
+            - acceptance: Playwright acceptance tests against a TYPO3 instance on SQLite.
+                          Remaining arguments are passed to "playwright test", the report is
+                          written to .Build/acceptance/report.
             - cgl: cgl test and fix all php files
             - checkBom: check UTF-8 files do not contain BOM
             - checkExceptionCodes: Check for duplicate exception codes
@@ -433,20 +436,13 @@ fi
 
 IMAGE_PHP="ghcr.io/typo3/core-testing-$(echo "php${PHP_VERSION}" | sed -e 's/\.//'):latest"
 IMAGE_DOCS="ghcr.io/typo3-documentation/render-guides:latest"
-IMAGE_SELENIUM="docker.io/selenium/standalone-chrome:4.0.0-20211102"
+# Keep the tag in step with "@playwright/test" in Tests/Acceptance/package.json:
+# the browsers of the image are the ones that release expects.
+IMAGE_PLAYWRIGHT="mcr.microsoft.com/playwright:v1.64.1-noble"
 IMAGE_MARIADB="docker.io/mariadb:${DBMS_VERSION}"
 IMAGE_MYSQL="docker.io/mysql:${DBMS_VERSION}"
 IMAGE_POSTGRES="docker.io/postgres:${DBMS_VERSION}-alpine"
 
-
-# Detect arm64 and use a seleniarm image.
-# In a perfect world selenium would have a arm64 integrated, but that is not on the horizon.
-# So for the time being we have to use seleniarm image.
-ARCH=$(uname -m)
-if [ ${ARCH} = "arm64" ]; then
-    IMAGE_SELENIUM="docker.io/seleniarm/standalone-chromium:4.1.2-20220227"
-fi
-echo "Architecture" ${ARCH} "requires" ${IMAGE_SELENIUM} "to run acceptance tests."
 
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
@@ -494,6 +490,24 @@ fi
 
 # Suite execution
 case ${TEST_SUITE} in
+    acceptance)
+        # A throwaway password per run: the instance only lives for this run, and no
+        # credential has to be kept in the repository.
+        ACCEPTANCE_ADMIN_PASSWORD="Acc-$(head -c 24 /dev/urandom | od -An -tx1 | tr -d ' \n')-1"
+        ACCEPTANCE_INSTANCE_PATH="${ROOT_DIR}/.Build/public/typo3temp/var/tests/acceptance"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name acceptance-setup-${SUFFIX} -e TYPO3_ACCEPTANCE_ADMIN_PASSWORD="${ACCEPTANCE_ADMIN_PASSWORD}" ${IMAGE_PHP} php -dxdebug.mode=off Tests/Acceptance/setup-instance.php
+        SUITE_EXIT_CODE=$?
+        if [[ ${SUITE_EXIT_CODE} -eq 0 ]]; then
+            # TYPO3_PATH_ROOT and TYPO3_PATH_APP point TYPO3 at the instance instead of
+            # .Build/public, which the autoloader of the composer installers would set.
+            ${CONTAINER_BIN} run -d ${CONTAINER_COMMON_PARAMS} -w ${ACCEPTANCE_INSTANCE_PATH} --name web-${SUFFIX} -e TYPO3_CONTEXT=Testing -e TYPO3_PATH_ROOT=${ACCEPTANCE_INSTANCE_PATH} -e TYPO3_PATH_APP=${ACCEPTANCE_INSTANCE_PATH} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_PHP} php -S 0.0.0.0:8000 ${ROOT_DIR}/Tests/Acceptance/router.php >/dev/null
+            waitFor web-${SUFFIX} 8000
+            mkdir -p .Build/.cache/npm .Build/acceptance
+            COMMAND="cd Tests/Acceptance && npm ci --no-audit --no-fund && npx playwright test $*"
+            ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name acceptance-${SUFFIX} --ipc=host -e HOME=${ROOT_DIR}/.Build/.cache -e npm_config_cache=${ROOT_DIR}/.Build/.cache/npm -e TYPO3_ACCEPTANCE_BASE_URL="http://web-${SUFFIX}:8000" -e TYPO3_ACCEPTANCE_ADMIN_PASSWORD="${ACCEPTANCE_ADMIN_PASSWORD}" ${IMAGE_PLAYWRIGHT} /bin/sh -c "${COMMAND}"
+            SUITE_EXIT_CODE=$?
+        fi
+        ;;
     cgl)
         if [ "${CGLCHECK_DRY_RUN}" -eq 1 ]; then
             COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php -v --dry-run --using-cache no --diff"
