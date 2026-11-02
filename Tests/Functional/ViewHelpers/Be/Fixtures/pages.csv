@@ -1,0 +1,15 @@
+"pages",,,,,,,
+,"uid","pid","sorting","doktype","is_siteroot","title","media"
+,1,0,256,1,1,"Home",2
+,2,1,256,1,0,"Without media",0
+"sys_file_reference",,,,,,,,,,,
+,"uid","pid","uid_local","uid_foreign","tablenames","fieldname","sorting_foreign","deleted","hidden","t3ver_wsid","t3ver_oid","t3ver_state"
+,1,1,2,1,"pages","media",2,0,0,0,0,0
+,2,1,1,1,"pages","media",1,0,0,0,0,0
+,3,1,3,1,"pages","media",3,1,0,0,0,0
+,4,1,4,1,"pages","media",4,0,1,0,0,0
+,5,1,5,1,"tt_content","image",1,0,0,0,0,0
+,6,1,5,1,"pages","other",1,0,0,0,0,0
+,7,1,6,1,"pages","media",5,0,0,1,0,1
+,8,1,7,1,"pages","media",1,0,0,1,2,0
+,9,1,2,1,"pages","media",2,0,0,1,1,2

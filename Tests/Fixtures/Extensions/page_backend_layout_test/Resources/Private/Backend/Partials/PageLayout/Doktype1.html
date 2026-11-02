@@ -1,0 +1,17 @@
+<html
+    lang="en"
+    xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
+    xmlns:pbl="http://typo3.org/ns/FGTCLB/PageBackendLayout/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<div class="callout callout-notice" data-testid="page-backend-layout-doktype-1">
+    <p data-testid="page-backend-layout-title">Page backend layout of {context.pageRecord.title}</p>
+    <pbl:be.imageId as="references" field="media" returnFirst="false" table="pages" uid="{context.pageRecord.uid}">
+        <ul data-testid="page-backend-layout-media">
+            <f:for each="{references}" as="reference">
+                <li>{reference.originalFile.name}</li>
+            </f:for>
+        </ul>
+    </pbl:be.imageId>
+</div>
+</html>

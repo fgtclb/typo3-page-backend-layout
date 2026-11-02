@@ -1,0 +1,19 @@
+{
+    "name": "fgtclb/page-backend-layout-test",
+    "description": "Test fixture of fgtclb/page-backend-layout providing page type partials",
+    "type": "typo3-cms-extension",
+    "require": {
+        "typo3/cms-core": "^13.4 || ^14.3"
+    },
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "stable",
+    "extra": {
+        "typo3/cms": {
+            "extension-key": "page_backend_layout_test",
+            "Package": {
+                "providesPackages": []
+            }
+        }
+    },
+    "version": "1.0.0"
+}

@@ -1,0 +1,12 @@
+"sys_file_storage",,,,,,,,,
+,"uid","pid","name","driver","configuration","is_browsable","is_public","is_writable","is_online"
+,1,0,"fileadmin","Local","<?xml version=""1.0"" encoding=""utf-8"" standalone=""yes"" ?><T3FlexForms><data><sheet index=""sDEF""><language index=""lDEF""><field index=""basePath""><value index=""vDEF"">fileadmin/</value></field><field index=""pathType""><value index=""vDEF"">relative</value></field><field index=""caseSensitive""><value index=""vDEF"">1</value></field></language></sheet></data></T3FlexForms>",1,1,1,1
+"sys_file",,,,,,,,,
+,"uid","pid","storage","identifier","identifier_hash","folder_hash","name","extension","mime_type"
+,1,0,1,"/first.jpg","a","b","first.jpg","jpg","image/jpeg"
+,2,0,1,"/second.jpg","c","b","second.jpg","jpg","image/jpeg"
+,3,0,1,"/deleted.jpg","d","b","deleted.jpg","jpg","image/jpeg"
+,4,0,1,"/hidden.jpg","e","b","hidden.jpg","jpg","image/jpeg"
+,5,0,1,"/other.jpg","f","b","other.jpg","jpg","image/jpeg"
+,6,0,1,"/workspace-new.jpg","g","b","workspace-new.jpg","jpg","image/jpeg"
+,7,0,1,"/workspace-changed.jpg","h","b","workspace-changed.jpg","jpg","image/jpeg"

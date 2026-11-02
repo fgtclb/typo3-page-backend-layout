@@ -11,38 +11,57 @@
 		"sort-packages": true,
 		"allow-plugins": {
 			"typo3/class-alias-loader": true,
-			"typo3/cms-composer-installers": true
+			"typo3/cms-composer-installers": true,
+			"sbuerk/fixture-packages": true
 		}
 	},
 	"extra": {
 		"branch-alias": {
-			"dev-main": "2.x.x-dev"
+			"dev-main": "3.x.x-dev"
 		},
 		"typo3/cms": {
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"extension-key": "page_backend_layout",
 			"ignore-as-root": false,
 			"web-dir": ".Build/public",
-			"app-dir": ".Build"
+			"app-dir": ".Build",
+			"version": "3.0.0",
+			"Package": {
+				"providesPackages": []
+			}
+		},
+		"sbuerk/fixture-packages": {
+			"paths": ["Tests/Fixtures/Extensions/*"]
 		}
 	},
 	"require": {
-		"php": "^8.1 || ^8.2 || ^8.3 || ^8.4",
-		"typo3/cms-backend": "^12.4 || ^13.4",
-		"typo3/cms-core": "^12.4 || ^13.4",
-		"typo3/cms-fluid": "^12.4 || ^13.4"
+		"php": "^8.2 || ^8.3 || ^8.4 || ^8.5",
+		"typo3/cms-backend": "^13.4 || ^14.3",
+		"typo3/cms-core": "^13.4 || ^14.3",
+		"typo3/cms-fluid": "^13.4 || ^14.3"
 	},
 	"require-dev": {
 		"friendsofphp/php-cs-fixer": "^3.14",
-		"phpstan/phpstan": "^1.10",
-		"saschaegerer/phpstan-typo3": "^1.8",
-		"typo3/cms-info": "^12.4 || ^13.4",
-		"typo3/cms-lowlevel": "^12.4 || ^13.4",
-		"typo3/cms-tstemplate": "^12.4 || ^13.4"
+		"helmich/typo3-typoscript-lint": "^3.3",
+		"nikic/php-parser": "^5.4",
+		"phpstan/phpstan": "^2.1.33",
+		"phpunit/phpunit": "^11.5.55",
+		"saschaegerer/phpstan-typo3": "^2.2 || ^3.1",
+		"sbuerk/fixture-packages": "^1.1.4",
+		"typo3/cms-info": "^13.4 || ^14.3",
+		"typo3/cms-lowlevel": "^13.4 || ^14.3",
+		"typo3/cms-tstemplate": "^13.4 || ^14.3",
+		"typo3/cms-workspaces": "^13.4 || ^14.3",
+		"typo3/testing-framework": "^9.7.0"
 	},
 	"autoload": {
 		"psr-4": {
 			"FGTCLB\\PageBackendLayout\\": "Classes"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"FGTCLB\\PageBackendLayout\\Tests\\": "Tests/"
 		}
 	}
 }

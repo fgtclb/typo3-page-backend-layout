@@ -127,7 +127,7 @@ cleanTestFiles() {
     # test related
     echo -n "Clean test related files ... "
     rm -rf \
-        .Build/Web/typo3temp/var/tests/
+        .Build/public/typo3temp/var/tests/
     echo "done"
 }
 
@@ -150,6 +150,9 @@ Usage: $0 [options] [file]
 Options:
     -s <...>
         Specifies which test suite to run
+            - acceptance: Playwright acceptance tests against a TYPO3 instance on SQLite.
+                          Remaining arguments are passed to "playwright test", the report is
+                          written to .Build/acceptance/report.
             - cgl: cgl test and fix all php files
             - checkBom: check UTF-8 files do not contain BOM
             - checkExceptionCodes: Check for duplicate exception codes
@@ -222,15 +225,14 @@ Options:
             - 15    maintained until 2027-11-11
             - 16    maintained until 2028-11-09
 
-    -t <12|13>
-        Only with -s composerInstall|composerInstallMin|composerInstallMax
+    -t <13|14>
+        Only with -s composerUpdate|phpstan|phpstanGenerateBaseline
         Specifies the TYPO3 CORE Version to be used
-            - 12: (default) use TYPO3 v12
-            - 12: use TYPO3 v13
+            - 13: (default) use TYPO3 v13
+            - 14: use TYPO3 v14
 
-    -p <8.1|8.2|8.3|8.4>
+    -p <8.2|8.3|8.4|8.5>
         Specifies the PHP minor version to be used
-            - 8.1: use PHP 8.1
             - 8.2: (default) use PHP 8.2
             - 8.3: use PHP 8.3
             - 8.4: use PHP 8.4
@@ -265,22 +267,22 @@ Options:
         Show this help.
 
 Examples:
-    # Run all core unit tests using PHP 8.1
+    # Run all core unit tests using PHP 8.2
     ./Build/Scripts/runTests.sh
     ./Build/Scripts/runTests.sh -s unit
 
     # Run all core units tests and enable xdebug (have a PhpStorm listening on port 9003!)
     ./Build/Scripts/runTests.sh -x
 
-    # Run unit tests in phpunit verbose mode with xdebug on PHP 8.1 and filter for test canRetrieveValueWithGP
-    ./Build/Scripts/runTests.sh -x -p 8.1 -e "-v --filter canRetrieveValueWithGP"
+    # Run unit tests in phpunit verbose mode with xdebug on PHP 8.2 and filter for test canRetrieveValueWithGP
+    ./Build/Scripts/runTests.sh -x -p 8.2 -e "-v --filter canRetrieveValueWithGP"
 
     # Run functional tests in phpunit with a filtered test method name in a specified file
     # example will currently execute two tests, both of which start with the search term
     ./Build/Scripts/runTests.sh -s functional -e "--filter deleteContent" typo3/sysext/core/Tests/Functional/DataHandling/Regular/Modify/ActionTest.php
 
-    # Run functional tests on postgres with xdebug, php 8.1 and execute a restricted set of tests
-    ./Build/Scripts/runTests.sh -x -p 8.1 -s functional -d postgres typo3/sysext/core/Tests/Functional/Authentication
+    # Run functional tests on postgres with xdebug, php 8.2 and execute a restricted set of tests
+    ./Build/Scripts/runTests.sh -x -p 8.2 -s functional -d postgres typo3/sysext/core/Tests/Functional/Authentication
 
     # Run functional tests on postgres 11
     ./Build/Scripts/runTests.sh -s functional -d postgres -k 11
@@ -301,7 +303,7 @@ fi
 
 # Option defaults
 TEST_SUITE="unit"
-CORE_VERSION="12"
+CORE_VERSION="13"
 DBMS="sqlite"
 PHP_VERSION="8.2"
 PHP_XDEBUG_ON=0
@@ -343,13 +345,13 @@ while getopts "a:b:s:d:i:p:t:xy:o:nhu" OPT; do
             ;;
         p)
             PHP_VERSION=${OPTARG}
-            if ! [[ ${PHP_VERSION} =~ ^(8.1|8.2|8.3|8.4|8.5)$ ]]; then
+            if ! [[ ${PHP_VERSION} =~ ^(8.2|8.3|8.4|8.5)$ ]]; then
                 INVALID_OPTIONS+=("p ${OPTARG}")
             fi
             ;;
         t)
             CORE_VERSION=${OPTARG}
-            if ! [[ ${CORE_VERSION} =~ ^(12|13)$ ]]; then
+            if ! [[ ${CORE_VERSION} =~ ^(13|14)$ ]]; then
                 INVALID_OPTIONS+=("t ${OPTARG}")
             fi
             ;;
@@ -395,7 +397,7 @@ fi
 
 handleDbmsOptions
 
-COMPOSER_ROOT_VERSION="5.x.x-dev"
+COMPOSER_ROOT_VERSION="3.x.x-dev"
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 USERSET=""
@@ -412,7 +414,7 @@ ROOT_DIR="${PWD}"
 
 # Create .cache dir: composer need this.
 mkdir -p .Build/.cache
-mkdir -p .Build/Web/typo3temp/var/tests
+mkdir -p .Build/public/typo3temp/var/tests
 
 
 IS_CORE_CI=0
@@ -434,20 +436,13 @@ fi
 
 IMAGE_PHP="ghcr.io/typo3/core-testing-$(echo "php${PHP_VERSION}" | sed -e 's/\.//'):latest"
 IMAGE_DOCS="ghcr.io/typo3-documentation/render-guides:latest"
-IMAGE_SELENIUM="docker.io/selenium/standalone-chrome:4.0.0-20211102"
+# Keep the tag in step with "@playwright/test" in Tests/Acceptance/package.json:
+# the browsers of the image are the ones that release expects.
+IMAGE_PLAYWRIGHT="mcr.microsoft.com/playwright:v1.64.1-noble"
 IMAGE_MARIADB="docker.io/mariadb:${DBMS_VERSION}"
 IMAGE_MYSQL="docker.io/mysql:${DBMS_VERSION}"
 IMAGE_POSTGRES="docker.io/postgres:${DBMS_VERSION}-alpine"
 
-
-# Detect arm64 and use a seleniarm image.
-# In a perfect world selenium would have a arm64 integrated, but that is not on the horizon.
-# So for the time being we have to use seleniarm image.
-ARCH=$(uname -m)
-if [ ${ARCH} = "arm64" ]; then
-    IMAGE_SELENIUM="docker.io/seleniarm/standalone-chromium:4.1.2-20220227"
-fi
-echo "Architecture" ${ARCH} "requires" ${IMAGE_SELENIUM} "to run acceptance tests."
 
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
@@ -495,6 +490,24 @@ fi
 
 # Suite execution
 case ${TEST_SUITE} in
+    acceptance)
+        # A throwaway password per run: the instance only lives for this run, and no
+        # credential has to be kept in the repository.
+        ACCEPTANCE_ADMIN_PASSWORD="Acc-$(head -c 24 /dev/urandom | od -An -tx1 | tr -d ' \n')-1"
+        ACCEPTANCE_INSTANCE_PATH="${ROOT_DIR}/.Build/public/typo3temp/var/tests/acceptance"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name acceptance-setup-${SUFFIX} -e TYPO3_ACCEPTANCE_ADMIN_PASSWORD="${ACCEPTANCE_ADMIN_PASSWORD}" ${IMAGE_PHP} php -dxdebug.mode=off Tests/Acceptance/setup-instance.php
+        SUITE_EXIT_CODE=$?
+        if [[ ${SUITE_EXIT_CODE} -eq 0 ]]; then
+            # TYPO3_PATH_ROOT and TYPO3_PATH_APP point TYPO3 at the instance instead of
+            # .Build/public, which the autoloader of the composer installers would set.
+            ${CONTAINER_BIN} run -d ${CONTAINER_COMMON_PARAMS} -w ${ACCEPTANCE_INSTANCE_PATH} --name web-${SUFFIX} -e TYPO3_CONTEXT=Testing -e TYPO3_PATH_ROOT=${ACCEPTANCE_INSTANCE_PATH} -e TYPO3_PATH_APP=${ACCEPTANCE_INSTANCE_PATH} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${IMAGE_PHP} php -S 0.0.0.0:8000 ${ROOT_DIR}/Tests/Acceptance/router.php >/dev/null
+            waitFor web-${SUFFIX} 8000
+            mkdir -p .Build/.cache/npm .Build/acceptance
+            COMMAND="cd Tests/Acceptance && npm ci --no-audit --no-fund && npx playwright test $*"
+            ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name acceptance-${SUFFIX} --ipc=host -e HOME=${ROOT_DIR}/.Build/.cache -e npm_config_cache=${ROOT_DIR}/.Build/.cache/npm -e TYPO3_ACCEPTANCE_BASE_URL="http://web-${SUFFIX}:8000" -e TYPO3_ACCEPTANCE_ADMIN_PASSWORD="${ACCEPTANCE_ADMIN_PASSWORD}" ${IMAGE_PLAYWRIGHT} /bin/sh -c "${COMMAND}"
+            SUITE_EXIT_CODE=$?
+        fi
+        ;;
     cgl)
         if [ "${CGLCHECK_DRY_RUN}" -eq 1 ]; then
             COMMAND="php -dxdebug.mode=off .Build/bin/php-cs-fixer fix --config Build/php-cs-fixer/php-cs-rules.php -v --dry-run --using-cache no --diff"
@@ -593,12 +606,12 @@ case ${TEST_SUITE} in
                 ;;
             sqlite)
                 # create sqlite tmpfs mount typo3temp/var/tests/functional-sqlite-dbs/ to avoid permission issues
-                mkdir -p "${ROOT_DIR}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/"
+                mkdir -p "${ROOT_DIR}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs/"
                 # "${TMPFS_MOUNT_OPTIONS}" carries the owner and mode the mount needs, which
                 # differ per container binary - see where it is assigned. Without them the
                 # test databases cannot be created and every test fails with "unable to open
                 # database file".
-                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_sqlite --tmpfs ${ROOT_DIR}/.Build/Web/typo3temp/var/tests/functional-sqlite-dbs/:${TMPFS_MOUNT_OPTIONS}"
+                CONTAINERPARAMS="-e typo3DatabaseDriver=pdo_sqlite --tmpfs ${ROOT_DIR}/.Build/public/typo3temp/var/tests/functional-sqlite-dbs/:${TMPFS_MOUNT_OPTIONS}"
                 ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name functional-${SUFFIX} ${XDEBUG_MODE} -e XDEBUG_CONFIG="${XDEBUG_CONFIG}" ${CONTAINERPARAMS} ${IMAGE_PHP} "${COMMAND[@]}"
                 SUITE_EXIT_CODE=$?
                 ;;
