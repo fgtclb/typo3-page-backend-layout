@@ -10,7 +10,10 @@ parameters:
 
 	paths:
 		- ../../../Classes
-		#- ../../../Tests/
+		- ../../../ext_emconf.php
 
 	excludePaths:
-		- ../../../.Build
+		- ../../../.Build/*
+
+	ignoreErrors:
+		- '#Variable \$_EXTKEY might not be defined\.#'
