@@ -10,6 +10,7 @@ parameters:
 
 	paths:
 		- ../../../Classes
+		- ../../../Tests
 		- ../../../ext_emconf.php
 
 	excludePaths:
