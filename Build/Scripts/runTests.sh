@@ -395,7 +395,7 @@ fi
 
 handleDbmsOptions
 
-COMPOSER_ROOT_VERSION="5.x.x-dev"
+COMPOSER_ROOT_VERSION="3.x.x-dev"
 HOST_UID=$(id -u)
 HOST_GID=$(id -g)
 USERSET=""
