@@ -15,7 +15,7 @@ FILES=`find . -type f \
 ! -path "./.php-cs-fixer.cache" \
 ! -path "./Documentation-GENERATED-temp/*" \
 ! -path "./Tests/Acceptance/node_modules/*" \
--print0 | xargs -0 -n1 -P8 file {} | grep 'UTF-8 Unicode (with BOM)'`
+-print0 | xargs -0 -n1 -P8 file {} | grep -E 'UTF-8 Unicode \(with BOM\)|UTF-8 \(with BOM\)'`
 
 if [ -n "${FILES}" ]; then
 echo "Found UTF-8 files with BOM:";
