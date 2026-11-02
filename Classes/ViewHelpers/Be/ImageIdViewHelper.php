@@ -8,17 +8,21 @@ use Doctrine\DBAL\Exception;
 use FGTCLB\PageBackendLayout\Exception\EmptyRequestException;
 use FGTCLB\PageBackendLayout\Exception\WrongContextException;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\FileReference;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 class ImageIdViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
+
+    public function __construct(
+        private readonly ConnectionPool $connectionPool,
+    ) {}
 
     public function initializeArguments(): void
     {
@@ -73,30 +77,33 @@ class ImageIdViewHelper extends AbstractViewHelper
         $uid = $arguments['uid'];
         $returnFirst = $arguments['returnFirst'];
 
-        $db = GeneralUtility::makeInstance(ConnectionPool::class)
-            ->getConnectionForTable('sys_file_reference');
-        $statement = $db
-            ->select(
-                ['*'],
-                'sys_file_reference',
-                [
-                    'tablenames' => $table,
-                    'fieldname' => $field,
-                    'uid_foreign' => $uid,
-                ]
-            );
+        $queryBuilder = $this->connectionPool->getQueryBuilderForTable('sys_file_reference');
+        $result = $queryBuilder
+            ->select('*')
+            ->from('sys_file_reference')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'tablenames',
+                    $queryBuilder->createNamedParameter($table, Connection::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'fieldname',
+                    $queryBuilder->createNamedParameter($field, Connection::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'uid_foreign',
+                    $queryBuilder->createNamedParameter($uid, Connection::PARAM_INT)
+                )
+            )
+            ->orderBy('sorting_foreign')
+            ->executeQuery();
         if ($returnFirst) {
-            $result = $statement->fetchAssociative();
-            if ($result !== false) {
-                $value = new FileReference($result);
-            } else {
-                $value = false;
-            }
+            $row = $result->fetchAssociative();
+            $value = $row !== false ? new FileReference($row) : false;
         } else {
-            $result = $statement->fetchAllAssociative();
             $value = [];
-            foreach ($result as $line) {
-                $value[] = new FileReference($line);
+            while ($row = $result->fetchAssociative()) {
+                $value[] = new FileReference($row);
             }
         }
 
