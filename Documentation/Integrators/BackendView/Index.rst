@@ -19,7 +19,7 @@ Add your backend partials to the system
 ..  code-block:: typoscript
     :caption: EXT:example/Configuration/page.tsconfig
 
-    templates.typo3/cms-backend.1740993701933 = vendor/example:Resources/Private/Backend/Templates
+    templates.typo3/cms-backend.1740993701933 = vendor/example:Resources/Private/Backend
 
 Create your partial
 -------------------
