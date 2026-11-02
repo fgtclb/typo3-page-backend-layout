@@ -1,5 +1,4 @@
 [![Latest Stable Version](https://poser.pugx.org/fgtclb/page-backend-layout/v/stable.svg?style=for-the-badge)](https://packagist.org/packages/fgtclb/page-backend-layout)
-[![TYPO3 12.4](https://img.shields.io/badge/TYPO3-12.4-green.svg?style=for-the-badge)](https://get.typo3.org/version/12)
 [![TYPO3 13.4](https://img.shields.io/badge/TYPO3-13.4-green.svg?style=for-the-badge)](https://get.typo3.org/version/13)
 [![License](https://poser.pugx.org/fgtclb/page-backend-layout/license?style=for-the-badge)](https://packagist.org/packages/fgtclb/page-backend-layout)
 [![Total Downloads](https://poser.pugx.org/fgtclb/page-backend-layout/downloads.svg?style=for-the-badge)](https://packagist.org/packages/fgtclb/page-backend-layout)
@@ -39,6 +38,7 @@ composer req fgtclb/page-backend-layout
 |-----------------------------|---------------|--------------------|
 | 1.x                         | 11 + 12       | \>=7.4             |
 | 2.x                         | 12 + 13       | 8.1, 8.2, 8.3, 8.4 |
+| 3.x                         | 13            | 8.2, 8.3, 8.4      |
 
 ## Create a release (maintainers only)
 
