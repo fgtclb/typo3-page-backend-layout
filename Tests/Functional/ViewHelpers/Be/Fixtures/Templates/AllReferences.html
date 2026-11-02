@@ -1,0 +1,7 @@
+<html
+    xmlns:f="http://typo3.org/ns/TYPO3Fluid/Fluid/ViewHelpers"
+    xmlns:pbl="http://typo3.org/ns/FGTCLB/PageBackendLayout/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+<pbl:be.imageId table="pages" field="media" uid="{uid}" returnFirst="false" as="references"><f:for each="{references}" as="reference">[{reference.originalFile.name}]</f:for></pbl:be.imageId>|{references}
+</html>
