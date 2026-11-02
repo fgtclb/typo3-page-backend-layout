@@ -20,7 +20,7 @@ use TYPO3\CMS\Core\Versioning\VersionState;
 use TYPO3\CMS\Fluid\Core\Rendering\RenderingContext;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-class ImageIdViewHelper extends AbstractViewHelper
+final class ImageIdViewHelper extends AbstractViewHelper
 {
     protected $escapeOutput = false;
 
