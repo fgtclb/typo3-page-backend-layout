@@ -7,6 +7,7 @@ namespace FGTCLB\PageBackendLayout\ViewHelpers\Be;
 use Doctrine\DBAL\Exception;
 use FGTCLB\PageBackendLayout\Exception\EmptyRequestException;
 use FGTCLB\PageBackendLayout\Exception\WrongContextException;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Http\ApplicationType;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
@@ -50,13 +51,13 @@ class ImageIdViewHelper extends AbstractViewHelper
         $renderingContext = $this->renderingContext;
         $renderChildrenClosure = $this->buildRenderChildrenClosure();
 
-        $request = $renderingContext->getRequest();
-        if ($request === null) {
+        if (!$renderingContext->hasAttribute(ServerRequestInterface::class)) {
             throw new EmptyRequestException(
                 'ViewHelper can only be called with a proper request',
                 1740993136
             );
         }
+        $request = $renderingContext->getAttribute(ServerRequestInterface::class);
         $isBackendRequest = $request->getAttribute('applicationType')
             && ApplicationType::fromRequest($request)->isBackend();
         if (!$isBackendRequest) {
