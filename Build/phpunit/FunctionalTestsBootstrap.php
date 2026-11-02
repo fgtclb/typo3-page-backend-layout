@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the TYPO3 CMS project.
  *
@@ -23,6 +24,12 @@
  * before instantiating the test suites.
  */
 (static function () {
+    // Makes the fixture extensions known to the testing framework, so tests can
+    // load them by composer package name or extension key.
+    if (class_exists(\SBUERK\AvailableFixturePackages::class)) {
+        (new \SBUERK\AvailableFixturePackages())->adoptFixtureExtensions();
+    }
+
     $testbase = new \TYPO3\TestingFramework\Core\Testbase();
     $testbase->defineOriginalRootPath();
     $testbase->createDirectory(ORIGINAL_ROOT . 'typo3temp/var/tests');
